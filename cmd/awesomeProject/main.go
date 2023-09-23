@@ -2,6 +2,8 @@ package main
 
 import (
 	"awesomeProject/internal/config"
+	"awesomeProject/internal/lib/logger/sl"
+	"awesomeProject/internal/storage/sqlite"
 	"log/slog"
 	"os"
 )
@@ -20,7 +22,13 @@ func main() {
 	log.Info("starting project", slog.String("env", cfg.Env))
 	log.Debug("debug messages are enabled")
 
-	// TODO: init storage: sqlite
+	storage, err := sqlite.New(cfg.StoragePath)
+	if err != nil {
+		log.Error("failed to init storage", sl.Err(err))
+		os.Exit(1)
+	}
+
+	_ = storage
 
 	// TODO: init router: chi, "chi render"
 
